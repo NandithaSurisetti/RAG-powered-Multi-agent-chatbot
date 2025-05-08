@@ -1,4 +1,5 @@
 from langchain_openai import ChatOpenAI
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_community.document_loaders import WebBaseLoader
@@ -21,14 +22,15 @@ from langchain.callbacks.manager import get_openai_callback
 
 import streamlit as st
 import os
-from dotenv import load_dotenv
-load_dotenv()
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+#from dotenv import load_dotenv
+#load_dotenv()
+#os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 
 
 
 st.title("RAG-Powered Multi-Agent Q&A Assistant")
+api_key=st.text_input("Give your OpenAI API key")
 query=st.text_input('Type your query here')
 
 if query:
@@ -54,7 +56,7 @@ if query:
                                      description="A tool for performing mathematical calculations.")
     
     tools=[wiki_tool,calculator_tool,retriever_tool]
-    llm=ChatOpenAI(model="gpt-3.5-turbo-0125" , temperature=0)
+    llm=ChatOpenAI(model="gpt-3.5-turbo-0125" , temperature=0, api_key=api_key)
 
     prompt=hub.pull("hwchase17/openai-functions-agent")
 

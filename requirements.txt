@@ -1,0 +1,13 @@
+langchain
+langchain_openai
+langchain_core
+langchain_community
+streamlit
+
+langchain_text_splitters
+langchain_chroma
+bs4
+pypdf
+wikipedia
+chromadb
+langchain_experimental

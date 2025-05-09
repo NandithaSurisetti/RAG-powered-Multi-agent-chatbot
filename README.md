@@ -1,37 +1,62 @@
 # RAG-Powered Multi-Agent Q&A Assistant
 
-This project implements a Retrieval-Augmented Generation (RAG) powered multi-agent system for answering user queries. The system combines tools like Wikipedia search, LangSmith documentation retriever, and a calculator to provide accurate and contextually relevant responses. It is built using LangChain and deployed using Streamlit for an interactive web interface.
+This project is a **RAG-Powered (Retrieval-Augmented Generation)** multi-agent Q&A Assistant that uses OpenAI's GPT-3.5 and integrates various tools to provide accurate and context-aware answers to user queries.
+
+The application is built using the LangChain framework and deployed using Streamlit, providing users with a simple and interactive interface to ask questions and retrieve information from external sources such as LangSmith documentation and Wikipedia.
 
 ---
 
 ## Features
 
-1. **Multi-Agent Tool Orchestration**:
-   - Combines multiple tools (Wikipedia search, LangSmith documentation retriever, and a Calculator).
-   - Automatically selects the appropriate tool based on the query context.
+1. **Wikipedia Integration**:
+   - Queries Wikipedia to fetch concise and accurate information.
+   - Uses LangChain's `WikipediaQueryRun` tool.
 
-2. **Retrieval-Augmented Generation**:
-   - Retrieves relevant documents from LangSmith documentation using a vector database.
-   - Uses Wikipedia for additional external knowledge retrieval.
-   - Performs mathematical calculations using a Python AST-based REPL tool.
+2. **LangSmith Documentation Search**:
+   - Leverages FAISS for retrieval-augmented search over LangSmith documentation.
+   - Allows users to ask detailed and specific questions about LangSmith.
 
-3. **LLM Integration**:
-   - Leverages OpenAI's GPT-3.5-turbo for natural language understanding and answer generation.
-   - Framework orchestrates tool usage with LangChain.
+3. **OpenAI GPT-3.5**:
+   - Utilizes GPT-3.5 (via the `gpt-3.5-turbo-0125` model) as the primary language model.
+   - Provides high-quality natural language responses.
 
-4. **Interactive Web Interface**:
-   - Provides a Streamlit-based interface for user queries.
-   - Displays the final answer, the tool used, and any retrieved documents (if applicable).
+4. **Dynamic Toolset**:
+   - Combines multiple tools for query resolution.
+   - Automatically selects the appropriate tool based on the query content.
+
+5. **Streamlit Interface**:
+   - Simple and user-friendly web interface.
+   - API key encrypted input field for secure usage.
 
 ---
 
-## Setup Instructions
+## How It Works
+
+1. **User Input**:
+   - The user enters their OpenAI API key and a query through the Streamlit interface.
+
+2. **Tool Selection**:
+   - The application dynamically selects the appropriate tool based on the query:
+     - Wikipedia for general knowledge queries.
+     - LangSmith-specific retriever for LangSmith-related questions.
+
+3. **Response Generation**:
+   - Uses the relevant tool to retrieve data and process the query.
+   - Generates a natural language response via GPT-3.5.
+
+4. **Output Display**:
+   - Displays the final answer along with details about the tool used.
+   - For LangSmith-related queries, retrieved documents are also shown.
+
+---
+
+## Installation
 
 ### Prerequisites
 - Python 3.8 or higher
 - OpenAI API Key
 
-### Installation
+### Steps
 
 1. **Clone the Repository**:
    ```bash
@@ -40,134 +65,102 @@ This project implements a Retrieval-Augmented Generation (RAG) powered multi-age
    ```
 
 2. **Install Dependencies**:
-   Install the required Python packages using pip:
+   Install all required Python libraries:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Set Up Environment Variables**:
-   - Create a `.env` file in the project root directory.
-   - Add your OpenAI API key in the following format:
-     ```
-     OPENAI_API_KEY=your_openai_api_key
-     ```
-
-4. **Run the Application**:
+3. **Run the Application**:
+   Start the Streamlit application:
    ```bash
    streamlit run main.py
    ```
 
----
-
-## Usage
-
-1. **Start the Streamlit App**:
-   - Open the Streamlit app in your browser.
-   - Enter your query in the input box.
-
-2. **Supported Query Types**:
-   - **LangSmith-related queries**:
-     - Example: "What is LangSmith?"
-     - The system will use the LangSmith documentation retriever and provide relevant documents.
-   - **Mathematical calculations**:
-     - Example: "Calculate 45 * 23."
-     - The system will use the calculator tool to provide the result.
-   - **General knowledge queries**:
-     - Example: "What is the capital of France?"
-     - The system will use the Wikipedia tool to fetch the answer.
-
-3. **Output**:
-   - The app displays:
-     - The final answer.
-     - The tool used.
-     - Retrieved documents (if applicable, for LangSmith queries).
-
----
-
-## Architecture Overview
-
-### Tools Used
-1. **Wikipedia Tool**:
-   - Uses `WikipediaAPIWrapper` to retrieve top articles.
-   - Integrated via `WikipediaQueryRun` for seamless interaction.
-
-2. **LangSmith Documentation Retriever**:
-   - Loads LangSmith documentation from the website.
-   - Splits documents into chunks using `RecursiveCharacterTextSplitter`.
-   - Utilizes `Chroma` as a vector store with `OpenAIEmbeddings` for retrieval.
-
-3. **Calculator Tool**:
-   - Uses `PythonAstREPLTool` to perform mathematical calculations safely.
-
-### Workflow
-- The LangChain agent orchestrates the tools.
-- Queries are routed to the appropriate tool based on their content.
-- The system generates responses using OpenAI GPT-3.5-turbo.
+4. **Enter API Key and Query**:
+   - Enter your OpenAI API key in the provided input field.
+   - Type your query and get the response.
 
 ---
 
 ## File Structure
 
 ```
-├── main.py                   # Main application file
-├── requirements.txt         # List of dependencies
-├── .env                     # Environment variables (OpenAI API Key)
-├── README.md                # Documentation
+├── main.py           # Main application code
+├── requirements.txt  # Python dependencies
+├── README.md         # Project documentation
 ```
 
 ---
 
-## Example Queries
+## Dependencies
 
-1. **LangSmith Query**:
-   - **Input**: "What is LangSmith?"
-   - **Output**:
-     - Answer about LangSmith.
-     - Retrieved documents from LangSmith documentation.
+The following Python packages are required to run this application:
 
-2. **Mathematical Calculation**:
-   - **Input**: "Calculate 12 + 8."
-   - **Output**: "20" (via the calculator tool).
+- `streamlit`
+- `langchain`
+- `faiss-cpu`
+- `openai`
+- `chromadb`
+- `transformers`
 
-3. **General Knowledge Query**:
-   - **Input**: "Who is Albert Einstein?"
-   - **Output**: A summary fetched from Wikipedia.
+Make sure all dependencies are listed in `requirements.txt`.
+
+---
+
+## Usage
+
+1. **Enter OpenAI API Key**:
+   - The application requires an OpenAI API key for GPT-3.5 integration.
+   - Enter the key securely in the password input field.
+
+2. **Ask a Question**:
+   - Type a query in the input box, and the system will process it using the appropriate tool.
+   - Receive an answer dynamically generated by GPT-3.5.
+
+3. **Supported Query Types**:
+   - **General Knowledge**: Queries are answered using Wikipedia.
+   - **LangSmith-Specific**: Questions about LangSmith are answered using the retriever tool.
+
+---
+
+## Example Usage
+
+### General Knowledge Query:
+- **Input**: "What is artificial intelligence?"
+- **Tool Used**: Wikipedia
+- **Output**: A concise explanation of artificial intelligence fetched from Wikipedia.
+
+### LangSmith Query:
+- **Input**: "How do I use LangSmith for prompt evaluation?"
+- **Tool Used**: LangSmith Retriever
+- **Output**: A detailed explanation with references to LangSmith documentation.
 
 ---
 
 ## Troubleshooting
 
-1. **No OpenAI API Key**:
-   - Ensure you have added your OpenAI API key to the `.env` file.
+### Error: `faiss` not installed
+Ensure FAISS is correctly installed:
+```bash
+pip install faiss-cpu
+```
 
-2. **Dependencies Not Installed**:
-   - Run `pip install -r requirements.txt` to install all dependencies.
-
-3. **Streamlit Not Found**:
-   - Install Streamlit using:
-     ```bash
-     pip install streamlit
-     ```
-
-4. **Error in LangSmith Retriever**:
-   - Ensure the LangSmith documentation URL (`https://docs.smith.langchain.com/`) is accessible.
-
----
-
-## Future Enhancements
-
-- Add more tools for expanded functionality (e.g., ArXiv for research papers, advanced calculators, etc.).
-- Improve tool selection logic for edge cases.
-- Enhance the user interface for better experience.
-
----
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+### Error: `OpenAI API key missing`
+Make sure to provide a valid OpenAI API key in the application.
 
 ---
 
 ## Contributing
 
-Contributions are welcome! If you have suggestions or improvements, feel free to submit a pull request.
+Contributions are welcome! To contribute:
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Submit a pull request with a detailed description of your changes.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---

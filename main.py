@@ -4,7 +4,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain.tools.retriever import create_retriever_tool
 
 from langchain_community.tools import WikipediaQueryRun
@@ -19,6 +19,7 @@ from langchain import hub
 from langchain.agents import create_openai_tools_agent
 from langchain.agents import AgentExecutor
 from langchain.callbacks.manager import get_openai_callback
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 import streamlit as st
 import os
@@ -30,10 +31,13 @@ import os
 
 
 st.title("RAG-Powered Multi-Agent Q&A Assistant")
-api_key=st.text_input("Give your OpenAI API key")
+api_key = st.text_input("Enter your OpenAI API key", type="password")
 query=st.text_input('Type your query here')
 
-if query:
+if api_key:
+    os.environ["OPENAI_API_KEY"] = api_key
+
+if query and api_key:
     #wikipedia tool
     api_wrapper=WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=200)
     wiki_tool=WikipediaQueryRun(api_wrapper=api_wrapper)
@@ -42,8 +46,9 @@ if query:
     loader=WebBaseLoader("https://docs.smith.langchain.com/")                    
     docs=loader.load()
     documents=RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200 ).split_documents(docs)
-
-    vector_db=Chroma.from_documents(documents, OpenAIEmbeddings())
+    
+    
+    vector_db = FAISS.from_documents(documents, OpenAIEmbeddings())
     retriever=vector_db.as_retriever()
     
     #top_docs=retriever.get_relevant_documents(query=input)

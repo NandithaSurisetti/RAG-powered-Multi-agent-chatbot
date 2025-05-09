@@ -23,9 +23,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 
 import streamlit as st
 import os
-#from dotenv import load_dotenv
-#load_dotenv()
-#os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
 
 
 
@@ -55,12 +53,9 @@ if query and api_key:
     retriever_tool=create_retriever_tool(retriever, "Langsmith_search" ,
                         "Search for information about Langsmith.For any questions about Langsmith you must use this tool")
 
-    #tools ready 
-    #combining these tools
-    calculator_tool = PythonAstREPLTool(name="Calculator", 
-                                     description="A tool for performing mathematical calculations.")
+
     
-    tools=[wiki_tool,calculator_tool,retriever_tool]
+    tools=[wiki_tool,retriever_tool]
     llm=ChatOpenAI(model="gpt-3.5-turbo-0125" , temperature=0, api_key=api_key)
 
     prompt=hub.pull("hwchase17/openai-functions-agent")
@@ -82,14 +77,7 @@ if query and api_key:
         st.write("Langsmith_search")
         st.subheader("Retrieved Documents")
         st.write(top_docs)
-        
-    elif "calculate" in query.lower():
-    
-        st.header("The Final answer")
-        st.write(response['output'].strip())
-        
-        st.subheader("Tool Used")
-        st.write("Calculator")
+
     
     else :
         st.header("The Final answer")

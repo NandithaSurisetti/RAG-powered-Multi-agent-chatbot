@@ -83,8 +83,8 @@ if query and api_key:
         st.subheader("Retrieved Documents")
         st.write(top_docs)
         
-    elif "calculate" or "+" or "-" or "/" or "=" in query.lower():
-        
+    elif "calculate" in query.lower():
+    
         st.header("The Final answer")
         st.write(response['output'].strip())
         

@@ -9,5 +9,6 @@ langchain_chroma
 bs4
 pypdf
 wikipedia
-chromadb
 langchain_experimental
+langchain_ollama
+faiss-cpu
